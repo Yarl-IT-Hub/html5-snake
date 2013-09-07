@@ -13,7 +13,7 @@ Required Software
 
 3. [Node JS](http://nodejs.org/)
 
-4. [Apache Cordorva](http://cordova.apache.org) 
+4. [Apache Cordova](http://cordova.apache.org) 
 
 The Setup
 =========
