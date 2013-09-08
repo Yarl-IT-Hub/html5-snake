@@ -58,14 +58,16 @@ The Setup
 4. Creating the project
    
    4.1 Create a project directory
+
        `cordova create html5-snake-app org.yit.demo SnakeApp -d`
        
    4.2 Add Android platform support
+
        `cd html5-snake-android`
 
        `cordova platform add android -d`
 
-       `cordova plugin add https://git-wip-us.apache.org/repos/asf/cordova-plugin-device-motion.git`  
+       `cordova plugin add https://git-wip-us.apache.org/repos/asf/cordova-plugin-device-motion.git`
 
 How to build
 ============
