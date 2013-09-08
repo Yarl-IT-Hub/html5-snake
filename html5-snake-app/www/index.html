@@ -33,7 +33,14 @@
 
     <script type="text/javascript" charset="utf-8">
 
+        //holds the reference of the acceleration meter listener
+        var watchId = null;
+
         function onGame() {
+            document.addEventListener("pause", onPause, false);
+            document.addEventListener("resume", onGame, false);
+
+
             //Canvas stuff
             var canvas = $("#canvas")[0];
             var ctx = canvas.getContext("2d");
@@ -57,9 +64,13 @@
                 score = 0;
 
                 //Lets move the snake now using a timer which will trigger the paint function
-                //every 60ms
-                if (typeof game_loop != "undefined") clearInterval(game_loop);
-                game_loop = setInterval(paint, 60);
+                //every 400ms
+                if (typeof game_loop != "undefined") {
+                    clearInterval(game_loop);
+                }
+                watchUserEvents();
+                game_loop = setInterval(paint, 400);
+
             }
 
             init();
@@ -138,19 +149,19 @@
                 for (var i = 0; i < snake_array.length; i++) {
                     var c = snake_array[i];
                     //Lets paint 10px wide cells
-                    paint_cell(c.x, c.y);
+                    paint_cell(c.x, c.y, "blue");
                 }
 
                 //Lets paint the food
-                paint_cell(food.x, food.y);
+                paint_cell(food.x, food.y, "red");
                 //Lets paint the score
                 var score_text = "Score: " + score;
                 ctx.fillText(score_text, 5, h - 5);
             }
 
             //Lets first create a generic function to paint cells
-            function paint_cell(x, y) {
-                ctx.fillStyle = "blue";
+            function paint_cell(x, y, color) {
+                ctx.fillStyle = color;
                 ctx.fillRect(x * cw, y * cw, cw, cw);
                 ctx.strokeStyle = "white";
                 ctx.strokeRect(x * cw, y * cw, cw, cw);
@@ -166,16 +177,54 @@
                 return false;
             }
 
-            //Lets add the keyboard controls now
-            $(document).keydown(function (e) {
-                var key = e.which;
-                //We will add another clause to prevent reverse gear
-                if (key == "37" && d != "right") d = "left";
-                else if (key == "38" && d != "down") d = "up";
-                else if (key == "39" && d != "left") d = "right";
-                else if (key == "40" && d != "up") d = "down";
-                //The snake is now keyboard controllable
-            })
+            // Start watching the acceleration
+            function watchUserEvents() {
+                // Update acceleration every 400 milli seconds
+                var options = { frequency: 400 };
+                watchID = navigator.accelerometer.watchAcceleration(onAccSuccess, onAccError, options);
+            }
+
+            // Stop watching the acceleration
+            function stopWatchUserEvents() {
+                if (watchID) {
+                    navigator.accelerometer.clearWatch(watchID);
+                    watchID = null;
+                }
+            }
+
+
+            // convert acceleration input to guide our snake
+            //x (- left) (+ right)
+            //y (- up) (+ down)
+            function onAccSuccess(acceleration) {
+                var x_current = acceleration.x;
+                var y_current = acceleration.y;
+                var z_current = acceleration.z;
+
+                var time_stamp = acceleration.timestamp;
+
+                var lastDirection = d;
+
+                var x_abs = Math.abs(x_current);
+                var y_abs = Math.abs(y_current);
+
+                if (x_abs > y_abs) {
+                    if (Math.round(x_current) < 0) d = "right"; else d = "left";
+                } else {
+                    if (Math.round(y_current) < 0) d = "up"; else d = "down";
+                }
+
+                var element = document.getElementById('accelerometer');
+                element.innerHTML = 'Acceleration X: ' + x_current         + '<br />' +
+                        'Acceleration Y: ' + y_current         + '<br />' +
+                        'Last Direction: ' + lastDirection + '<br />' +
+                        'New Direction: ' + d + '<br />';
+            }
+
+            // onError: Failed to get the acceleration
+            function onAccError() {
+                alert('onError!');
+            }
 
         }
 
@@ -183,7 +232,7 @@
         function onPause() {
         }
 
-        // Wait for device API libraries to load
+        // Handle on load
         function onLoad() {
             onGame();
         }
@@ -195,6 +244,7 @@
 
 <body onload="onLoad()">
     <canvas id="canvas"></canvas>
+    <div id="accelerometer">Waiting for accelerometer...</div>
 </body>
 
 </html>
