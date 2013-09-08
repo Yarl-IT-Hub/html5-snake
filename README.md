@@ -59,15 +59,15 @@ The Setup
    
    4.1 Create a project directory
 
-       run `cordova create html5-snake-app org.yit.demo SnakeApp -d`
+        run `cordova create html5-snake-app org.yit.demo SnakeApp -d`
        
    4.2 Add Android platform support
 
-       run `cd html5-snake-android`
+        run `cd html5-snake-android`
 
-       run `cordova platform add android -d`
+        run `cordova platform add android -d`
 
-       run `cordova plugin add https://git-wip-us.apache.org/repos/asf/cordova-plugin-device-motion.git`
+        run `cordova plugin add https://git-wip-us.apache.org/repos/asf/cordova-plugin-device-motion.git`
 
 How to build
 ============
@@ -76,11 +76,11 @@ Go to project directory
 
 1. Build the app
 
-   run `cordova build -d`
+        run `cordova build -d`
 
 2. Lauch the app in the emulator
 
-   run `cordova emulate android -d`
+        run `cordova emulate android -d`
 
 
 
