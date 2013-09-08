@@ -62,7 +62,10 @@ The Setup
        
    4.2 Add Android platform support
        `cd html5-snake-android`
+
        `cordova platform add android -d`
+
+       `cordova plugin add https://git-wip-us.apache.org/repos/asf/cordova-plugin-device-motion.git`  
 
 How to build
 ============
