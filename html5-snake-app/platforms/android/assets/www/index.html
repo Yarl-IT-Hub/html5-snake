@@ -27,10 +27,6 @@
     <script type="text/javascript" src="cordova.js"></script>
     <link rel="stylesheet" type="text/css" href="css/index.css"/>
 
-
-    <script type="text/javascript" src="js/jquery.js"></script>
-
-
     <script type="text/javascript" charset="utf-8">
 
         //holds the reference of the acceleration meter listener
@@ -42,10 +38,16 @@
 
 
             //Canvas stuff
-            var canvas = $("#canvas")[0];
+            var canvas = document.getElementById('canvas');
             var ctx = canvas.getContext("2d");
-            var w = $("#canvas").width();
-            var h = $("#canvas").height();
+
+            //fit the canvas into the inner window
+            ctx.canvas.width  = window.innerWidth;
+            ctx.canvas.height = window.innerHeight;
+
+
+            var w = canvas.width;
+            var h = canvas.height;
 
             //Lets save the cell width in a variable for easy control
             var cw = 10;
